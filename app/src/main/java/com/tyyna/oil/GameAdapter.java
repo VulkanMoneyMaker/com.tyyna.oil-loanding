@@ -1,61 +1,40 @@
 package com.tyyna.oil;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.List;
+
+import com.tyyna.oil.wheel.src.kankan.wheel.widget.adapters.AbstractWheelAdapter;
+
+import java.util.ArrayList;
 
 
-public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
+public class GameAdapter extends AbstractWheelAdapter {
+    int MaxNum;
+    LayoutInflater lInflater;
+    ArrayList<Integer> list;
+    Context mContext;
 
-    private List<Integer> image;
-    private Context context;
-    private OnGameClicl onGameClick;
-
-    public interface OnGameClicl{
-        void onClick();
+    @SuppressLint("WrongConstant")
+    public GameAdapter(Context mContext, ArrayList<Integer> list) {
+        this.mContext = mContext;
+        this.list = list;
+        this.lInflater = (LayoutInflater) mContext.getSystemService("layout_inflater");
+        this.MaxNum = list.size();
     }
 
-    public GameAdapter(List<Integer> image, Context context, OnGameClicl onGameClick) {
-        this.image = image;
-        this.context = context;
-        this.onGameClick = onGameClick;
+    public int getItemsCount() {
+        return this.MaxNum;
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_casino, parent, false);
-
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.imageView.setImageDrawable(context.getResources().getDrawable(image.get(position)));
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onGameClick.onClick();
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return image.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        private ImageView imageView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.list_item);
-        }
+    public View getItem(int index, View convertView, ViewGroup parent) {
+        View view = this.lInflater.inflate(R.layout.item_list, parent, false);
+        ((ImageView) view.findViewById(R.id.image)).setImageDrawable(ContextCompat.getDrawable(this.mContext, ((Integer) this.list.get(index)).intValue()));
+        return view;
     }
 }

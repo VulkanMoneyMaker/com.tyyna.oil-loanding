@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.icu.util.TimeZone;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -29,13 +31,14 @@ import com.tyyna.oil.network.model.IpModel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity {
+public class StratAc extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
@@ -87,6 +90,29 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     boolean off = false;
+
+    Handler h;
+
+    void downloadFile() {
+        // пауза - 1 секунда
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    void crete(){
+        Thread thread = new Thread(() -> {
+            for (int i = 1; i <= 10; i++) {
+                downloadFile();
+                Message message = new Message();
+                message.obj = "fdsfd" +i;
+                h.sendMessage(message);
+                // пишем лог
+            }
+        });
+        thread.start();
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void openFile(String countryCode) {
@@ -155,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void openGame() {
         progressBar.setVisibility(View.GONE);
-        Intent intent = new Intent(this, GameActivity.class);
+        Intent intent = new Intent(this, PlayAct.class);
         startActivity(intent);
     }
 }
